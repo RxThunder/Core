@@ -1,0 +1,38 @@
+<?php
+
+$header = <<<EOF
+This file is part of the Thunder micro CLI framework.
+(c) Jérémy Marodon <marodon.jeremy@gmail.com>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+EOF;
+
+$finder = PhpCsFixer\Finder::create()
+    ->in([
+        __DIR__.'/src',
+    ])
+;
+
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules([
+        '@Symfony' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'header_comment' => ['header' => $header],
+        'ordered_imports' => true,
+        'no_alternative_syntax' => true,
+        'no_binary_string' => true,
+        'no_extra_blank_lines' => ['tokens' => ['break', 'continue', 'extra', 'return', 'throw', 'use', 'parenthesis_brace_block', 'square_brace_block', 'curly_brace_block']],
+        'no_null_property_initialization' => true,
+        'no_short_echo_tag' => true,
+        'no_superfluous_elseif' => true,
+        'no_unneeded_curly_braces' => true,
+        'no_unneeded_final_method' => true,
+        'no_unreachable_default_argument_value' => true,
+        'no_unset_on_property' => true,
+        'no_useless_else' => true,
+        'no_useless_return' => true,
+        'native_function_invocation' => ['include' => ['@compiler_optimized'], 'scope' => 'namespaced'],
+    ])
+    ->setFinder($finder)
+;

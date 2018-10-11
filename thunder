@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/../autoload.php';
+
+use Symfony\Component\Console\Input\ArgvInput;
+use Th3Mouk\Thunder\Application;
+use Th3Mouk\Thunder\Kernel\Kernel;
+
+$input = new ArgvInput();
+$env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'dev');
+$debug = ($_SERVER['APP_DEBUG'] ?? true) !== '0' && !$input->hasParameterOption(['--no-debug', '']);
+
+$kernel = new Kernel($env, $debug);
+$application = new Application($kernel);
+
+$application->run($input);

@@ -1,0 +1,6 @@
+parameters:
+	excludes_analyse:
+		- %rootDir%/../../../vendor
+
+	ignoreErrors:
+	    - '#LibEventLoop given#'
