@@ -24,3 +24,4 @@ The aims is to provide a simple extensible kernel with DI.
 - [ ] Extract RabbitMQ code into a plugin
 - [ ] Extract CRON console code into a plugin
 - [ ] Make AbstractSubject optional in the router
+- [ ] Add JSON schema validation of messages
