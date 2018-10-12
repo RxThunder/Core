@@ -23,13 +23,13 @@ class Router
         $this->matcher = new Matcher($this->collection);
     }
 
-    public function __invoke(AbstractSubject $value)
+    public function __invoke(AbstractSubject $subject)
     {
-        if (null === $handler = ($this->matcher)($value)) {
+        if (null === $route = ($this->matcher)($subject)) {
             return;
         }
 
-        $handler($value);
+        $route($subject);
     }
 
     public function addRoute(AbstractRoute $route)
