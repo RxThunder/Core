@@ -9,10 +9,13 @@
 
 namespace Th3Mouk\Thunder\Console;
 
+use EventLoop\EventLoop;
 use Psr\Container\ContainerInterface;
-use Rx\Scheduler;
+use Rx\Observer\CallbackObserver;
 use Rxnet\EventStore\EventStore;
+use Rxnet\EventStore\Exception\NotMasterException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Th3Mouk\Thunder\Router\AbstractSubject;
 use Th3Mouk\Thunder\Router\EventStore\Adapter;
 use Th3Mouk\Thunder\Router\Router;
 
@@ -38,13 +41,11 @@ final class EventStoreConsole extends AbstractConsole
 
     public function __construct(
         ContainerInterface $container,
-        EventStore $eventStore,
         ParameterBagInterface $parameterBag,
         Router $router,
         Adapter $adapter
     ) {
         $this->container = $container;
-        $this->eventStore = $eventStore;
         $this->parameterBag = $parameterBag;
         $this->router = $router;
         $this->adapter = $adapter;
@@ -56,79 +57,39 @@ final class EventStoreConsole extends AbstractConsole
         array $middlewares,
         int $timeout
     ) {
-        // You only need to set the default scheduler once
-        Scheduler::setDefaultFactory(
-            function () {
-                // The getLoop method auto start loop
-                return new Scheduler\EventLoopScheduler(\EventLoop\getLoop());
-            }
+        $this->eventStore = new EventStore(EventLoop::getLoop());
+
+        $dsn = $this->parameterBag->get('eventstore.tcp');
+
+        $router = new CallbackObserver(
+            function(AbstractSubject $subject) {($this->router)($subject);},
+            function($e) {var_dump($e);}
         );
 
-        // Middlewares declared in config/middleware.php
-//        foreach ($middlewares as $middleware) {
-//            $this->middlewareProvider->append($this->container->get("middleware.{$middleware}"));
-//        }
+        $connection = function($dsn) use ($stream, $group) {
+            $this->eventStore = new EventStore(EventLoop::getLoop());
 
-        $storeDSN = $this->parameterBag->get('eventstore.tcp');
-//        $this->log->info('Connect to eventStore');
-        $this->eventStore
-            ->connect($storeDSN)
-            ->doOnError(function (\Exception $e) {
-//                $this->log->error($e->getMessage());
-                var_dump($e);
-                die('Crash to retry later');
-            })
-            ->subscribe(function () use ($stream, $group) {
-                $this->eventStore->persistentSubscription($stream, $group)
-                    ->flatMap($this->adapter)
-//                    ->flatMap(function (AcknowledgeableEventRecord $record) {
-//                        // todo handle middlewares with map
-//                        echo 'xD', PHP_EOL;
-//
-//                        // todo send Observable into router
-//
-//                        // todo subscribe to ack or nack and log
-//                        echo "received {$record->getId()}  {$record->getNumber()}@{$record->getStreamId()} {$record->getType()}\n";
-//                        return $record->ack();
-//                        //$record->nack();
-//                    })
-                    ->subscribe(
-                        function ($subject) {
-                            ($this->router)($subject);
-                        },
-                        function ($e) {
-                            var_dump($e);
-                        }
-                    );
-            });
+            return $this->eventStore
+                ->connect($dsn)
+                ->flatMapTo($this->eventStore->persistentSubscription($stream, $group));
+        };
 
-//        $this->log->info("Connected to stream {$stream} as group {$group}");
+        $reconnect = function(\Exception $e) use ($connection, $dsn) {
+            if ($e instanceof NotMasterException) {
+                $credentials = parse_url($dsn);
+                $dsn = $credentials['user'].':'.$credentials['pass'].'@'.$e->getMasterIp().':'.$e->getMasterPort();
 
-//        $adapter = $this->container->make(
-//            AcknowledgeableJsonAdapter::class,
-//            ['timeout' => $timeout]
-//        );
+                return $connection($dsn);
+            }
+            throw $e;
+        };
 
-//        $middlewareSequence = array_merge(
-//            $this->middlewareProvider->beforeAdapter(), [$adapter], $this->middlewareProvider->beforeRoute()
-//        );
+        $connection($dsn)
+            ->catch($reconnect)
+            ->flatMap($this->adapter)
+            ->subscribe($router)
+        ;
 
-//        $observable = $this->eventStore->persistentSubscription($stream, $group);
-
-//        foreach ($middlewareSequence as $selector) {
-//            $observable = $observable->flatMap($selector);
-//        }
-
-//        $observable
-//            ->subscribe(
-//                new CallbackObserver(
-////                    [$this->router, 'onNext'],
-//                    null,
-//                    function (\Exception $e) {
-//                        die('Error in persistent subscription crash : '.$e->getMessage());
-//                    }
-//                ),
-//                new EventLoopScheduler($this->loop)
-//            );
+        EventLoop::getLoop()->run();
     }
 }
