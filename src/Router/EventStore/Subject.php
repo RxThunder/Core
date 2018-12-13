@@ -11,22 +11,17 @@ namespace Th3Mouk\Thunder\Router\EventStore;
 
 use Rxnet\EventStore\AcknowledgeableEventRecord;
 use Th3Mouk\Thunder\Router\AbstractSubject;
+use Th3Mouk\Thunder\Router\DataModel;
 
 final class Subject extends AbstractSubject
 {
-    private $model;
     private $eventRecord;
 
     public function __construct(
-        Model $model,
+        DataModel $dataModel,
         AcknowledgeableEventRecord $eventRecord
     ) {
-        $this->model = $model;
         $this->eventRecord = $eventRecord;
-    }
-
-    public function getRoutingPath()
-    {
-        return $this->model->getType();
+        parent::__construct($dataModel);
     }
 }

@@ -11,6 +11,7 @@ namespace Th3Mouk\Thunder\Router\EventStore;
 
 use Rx\Observable;
 use Rxnet\EventStore\AcknowledgeableEventRecord;
+use Th3Mouk\Thunder\Router\DataModel;
 
 final class Adapter
 {
@@ -32,7 +33,7 @@ final class Adapter
             'metadata' => $meta,
         ];
 
-        $dataModel = new Model($type, $data, $metadata);
+        $dataModel = new DataModel($type, $data, $metadata);
         $subject = new Subject($dataModel, $record);
 
         $subjectObs = $subject->skip(1)->share();

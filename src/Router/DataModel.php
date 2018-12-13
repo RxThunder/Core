@@ -7,9 +7,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Th3Mouk\Thunder\Router\RabbitMq;
+namespace Th3Mouk\Thunder\Router;
 
-final class Model
+final class DataModel
 {
     private $type;
     private $data;

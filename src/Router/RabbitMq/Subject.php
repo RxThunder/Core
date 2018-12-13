@@ -11,22 +11,17 @@ namespace Th3Mouk\Thunder\Router\RabbitMq;
 
 use Rxnet\RabbitMq\Message;
 use Th3Mouk\Thunder\Router\AbstractSubject;
+use Th3Mouk\Thunder\Router\DataModel;
 
 final class Subject extends AbstractSubject
 {
-    private $model;
     private $message;
 
     public function __construct(
-        Model $model,
+        DataModel $dataModel,
         Message $message
     ) {
-        $this->model = $model;
         $this->message = $message;
-    }
-
-    public function getRoutingPath()
-    {
-        return $this->model->getType();
+        parent::__construct($dataModel);
     }
 }

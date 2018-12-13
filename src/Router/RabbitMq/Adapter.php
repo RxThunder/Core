@@ -11,6 +11,7 @@ namespace Th3Mouk\Thunder\Router\RabbitMq;
 
 use Rx\Observable;
 use Rxnet\RabbitMq\Message;
+use Th3Mouk\Thunder\Router\DataModel;
 
 final class Adapter
 {
@@ -31,7 +32,7 @@ final class Adapter
             'date' => $message->exchange,
         ];
 
-        $dataModel = new Model($type, $data, $metadata);
+        $dataModel = new DataModel($type, $data, $metadata);
         $subject = new Subject($dataModel, $message);
 
         $subjectObs = $subject->skip(1)->share();

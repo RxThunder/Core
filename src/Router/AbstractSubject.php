@@ -13,7 +13,23 @@ use Rx\Subject\Subject;
 
 class AbstractSubject extends Subject
 {
+    /**
+     * @var DataModel
+     */
+    protected $dataModel;
+
+    public function __construct($dataModel)
+    {
+        $this->dataModel = $dataModel;
+    }
+
+    public function getDataModel(): DataModel
+    {
+        return $this->dataModel;
+    }
+
     public function getRoutingPath()
     {
+        return $this->dataModel->getType();
     }
 }
