@@ -15,9 +15,7 @@ abstract class AbstractRoute
 {
     public const PATH = '/';
 
-    public function __invoke(AbstractSubject $subject)
-    {
-    }
+    abstract public function __invoke(AbstractSubject $subject);
 
     public function getRoutePath(): string
     {
