@@ -62,11 +62,11 @@ final class EventStoreConsole extends AbstractConsole
         $dsn = $this->parameterBag->get('eventstore.tcp');
 
         $router = new CallbackObserver(
-            function(AbstractSubject $subject) {($this->router)($subject);},
-            function($e) {var_dump($e);}
+            function (AbstractSubject $subject) {($this->router)($subject); },
+            function ($e) {var_dump($e); }
         );
 
-        $connection = function($dsn) use ($stream, $group) {
+        $connection = function ($dsn) use ($stream, $group) {
             $this->eventStore = new EventStore(EventLoop::getLoop());
 
             return $this->eventStore
@@ -74,7 +74,7 @@ final class EventStoreConsole extends AbstractConsole
                 ->flatMapTo($this->eventStore->persistentSubscription($stream, $group));
         };
 
-        $reconnect = function(\Exception $e) use ($connection, $dsn) {
+        $reconnect = function (\Exception $e) use ($connection, $dsn) {
             if ($e instanceof NotMasterException) {
                 $credentials = parse_url($dsn);
                 $dsn = $credentials['user'].':'.$credentials['pass'].'@'.$e->getMasterIp().':'.$e->getMasterPort();
