@@ -10,7 +10,6 @@
 namespace Th3Mouk\Thunder\Console;
 
 use EventLoop\EventLoop;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Rx\Observer\CallbackObserver;
@@ -37,19 +36,16 @@ final class EventStoreConsole extends AbstractConsole implements LoggerAwareInte
         'timeout' => 10000,
     ];
 
-    private $container;
     private $eventStore;
     private $parameterBag;
     private $router;
     private $adapter;
 
     public function __construct(
-        ContainerInterface $container,
         ParameterBagInterface $parameterBag,
         Router $router,
         Adapter $adapter
     ) {
-        $this->container = $container;
         $this->parameterBag = $parameterBag;
         $this->router = $router;
         $this->adapter = $adapter;
