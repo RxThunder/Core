@@ -6,6 +6,7 @@ use Th3Mouk\Thunder\Console\AbstractConsole;
 $definition = new Definition();
 $definition->setPublic(true);
 $definition->setAutowired(true);
+$definition->setAutoconfigured(true);
 
 $container->registerForAutoconfiguration(AbstractConsole::class)
     ->addTag('console');
