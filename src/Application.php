@@ -22,7 +22,7 @@ class Application extends BaseApplication
         $kernelClass = \get_class($kernel);
         $kernel->boot();
 
-        parent::__construct($kernel::NAME, $kernelClass::VERSION);
+        parent::__construct($kernelClass::NAME, $kernelClass::VERSION);
         $this->useContainer($kernel->getContainer());
 
         $this->getDefinition()->addOptions([
