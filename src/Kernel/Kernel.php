@@ -83,11 +83,12 @@ class Kernel implements KernelInterface
         $internalLoader->load('console.php');
         $internalLoader->load('container.php');
         $internalLoader->load('eventstore.php');
-        $internalLoader->load('logger.php');
         $internalLoader->load('router.php');
 
         $personalLoader->load('parameters.php');
         $personalLoader->load('services.php');
+
+        $internalLoader->load('logger.php');
     }
 
     protected function loadEnvironment()
