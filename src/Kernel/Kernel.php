@@ -84,6 +84,11 @@ class Kernel implements KernelInterface
 
         $personalLoader->load('parameters.php');
         $personalLoader->load('services.php');
+
+        $container->setParameter('thunder.environment', $this->getEnvironment());
+        $container->setParameter('thunder.debug', $this->isDebug());
+        $container->setParameter('thunder.project_dir', $this->getProjectDir());
+        $container->setParameter('thunder.config_dir', $this->getConfigDir());
     }
 
     protected function loadEnvironment()
