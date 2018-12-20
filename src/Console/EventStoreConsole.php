@@ -11,6 +11,8 @@ namespace Th3Mouk\Thunder\Console;
 
 use EventLoop\EventLoop;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Rx\Observer\CallbackObserver;
 use Rxnet\EventStore\EventStore;
 use Rxnet\EventStore\Exception\NotMasterException;
@@ -19,8 +21,10 @@ use Th3Mouk\Thunder\Router\AbstractSubject;
 use Th3Mouk\Thunder\Router\EventStore\Adapter;
 use Th3Mouk\Thunder\Router\Router;
 
-final class EventStoreConsole extends AbstractConsole
+final class EventStoreConsole extends AbstractConsole implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     public static $expression = 'listen:persistent stream group [--middlewares=]* [--timeout=]';
     public static $description = 'EventStore persistent listener for projection';
     public static $argumentsAndOptions = [
@@ -62,8 +66,14 @@ final class EventStoreConsole extends AbstractConsole
         $dsn = $this->parameterBag->get('eventstore.tcp');
 
         $router = new CallbackObserver(
-            function (AbstractSubject $subject) {($this->router)($subject); },
-            function ($e) {var_dump($e); }
+            function (AbstractSubject $subject) {
+                try {
+                    ($this->router)($subject);
+                } catch (\Throwable $throwable) {
+                    $this->logger->error($throwable);
+                }
+            },
+            function (\Throwable $throwable) {$this->logger->error($throwable); }
         );
 
         $connection = function ($dsn) use ($stream, $group) {
