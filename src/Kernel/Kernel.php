@@ -99,14 +99,18 @@ class Kernel implements KernelInterface
     {
         if (null === $this->projectDir) {
             $r = new \ReflectionObject($this);
-            $dir = $rootDir = \dirname($r->getFileName());
-            while (!file_exists($dir.'/composer.lock')) {
-                if ($dir === \dirname($dir)) {
-                    return $this->projectDir = $rootDir;
+
+            if ($fileName = $r->getFileName()) {
+                $dir = $rootDir = \dirname($fileName);
+                while (!file_exists($dir.'/composer.lock')) {
+                    if ($dir === \dirname($dir)) {
+                        return $this->projectDir = $rootDir;
+                    }
+                    $dir = \dirname($dir);
                 }
-                $dir = \dirname($dir);
+
+                $this->projectDir = $dir;
             }
-            $this->projectDir = $dir;
         }
 
         return $this->projectDir;
