@@ -47,7 +47,6 @@ class Kernel implements KernelInterface
             return;
         }
 
-        $this->loadEnvironment();
         $this->initializeContainer();
 
         $this->booted = true;
