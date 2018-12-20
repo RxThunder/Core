@@ -65,6 +65,11 @@ class Kernel implements KernelInterface
 
     protected function loadDefinitions(ContainerBuilder $container)
     {
+        $container->setParameter('thunder.environment', $this->getEnvironment());
+        $container->setParameter('thunder.debug', $this->isDebug());
+        $container->setParameter('thunder.project_dir', $this->getProjectDir());
+        $container->setParameter('thunder.config_dir', $this->getConfigDir());
+
         $internalLoader =
             new PhpFileLoader($container,
                 new FileLocator(__DIR__.'/../../config')
@@ -83,11 +88,6 @@ class Kernel implements KernelInterface
 
         $personalLoader->load('parameters.php');
         $personalLoader->load('services.php');
-
-        $container->setParameter('thunder.environment', $this->getEnvironment());
-        $container->setParameter('thunder.debug', $this->isDebug());
-        $container->setParameter('thunder.project_dir', $this->getProjectDir());
-        $container->setParameter('thunder.config_dir', $this->getConfigDir());
     }
 
     protected function loadEnvironment()
