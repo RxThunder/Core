@@ -66,10 +66,18 @@ final class EventStoreConsole extends AbstractConsole implements LoggerAwareInte
                 try {
                     ($this->router)($subject);
                 } catch (\Throwable $throwable) {
-                    $this->logger->error($throwable);
+                    $this->captureException(
+                        'Something weird append in the router',
+                        $throwable
+                    );
                 }
             },
-            function (\Throwable $throwable) {$this->logger->error($throwable); }
+            function (\Throwable $throwable) {
+                $this->captureException(
+                    'Something weird append with EventStore connection',
+                    $throwable
+                );
+            }
         );
 
         $connection = function ($dsn) use ($stream, $group) {
@@ -97,5 +105,14 @@ final class EventStoreConsole extends AbstractConsole implements LoggerAwareInte
         ;
 
         EventLoop::getLoop()->run();
+    }
+
+    public function captureException(
+        string $message = '',
+        \Throwable $throwable = null
+    ) {
+        $this->logger->error($message, [
+            'exception' => $throwable
+        ]);
     }
 }
