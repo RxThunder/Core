@@ -11,8 +11,7 @@ namespace Th3Mouk\Thunder;
 
 use Silly\Application as BaseApplication;
 use Silly\Input\InputOption;
-use Th3Mouk\Thunder\Console\EventStoreConsole;
-use Th3Mouk\Thunder\Console\RabbitMqConsole;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Th3Mouk\Thunder\Kernel\KernelInterface;
 
 class Application extends BaseApplication
@@ -30,31 +29,22 @@ class Application extends BaseApplication
                 $kernel->getEnvironment()),
         ]);
 
-        // todo add console discovery
+        /** @var ContainerBuilder $container */
+        $container = $kernel->getContainer();
 
-        $this
-            ->command(
-                EventStoreConsole::$expression,
-                EventStoreConsole::class
-            )
-            ->descriptions(
-                EventStoreConsole::$description,
-                EventStoreConsole::$argumentsAndOptions
-            )
-            ->defaults(EventStoreConsole::$defaults)
-        ;
+        $consoleServicesList = $container->findTaggedServiceIds('console');
 
+        foreach ($consoleServicesList as $id => $tag) {
+            $this->registerConsole($id);
+        }
+    }
+
+    private function registerConsole(string $console)
+    {
         $this
-            ->command(
-                RabbitMqConsole::$expression,
-                RabbitMqConsole::class
-            )
-            ->descriptions(
-                RabbitMqConsole::$description,
-                RabbitMqConsole::$argumentsAndOptions
-            )
-            ->defaults(RabbitMqConsole::$defaults)
-        ;
+            ->command($console::$expression, $console)
+            ->descriptions($console::$description, $console::$argumentsAndOptions)
+            ->defaults($console::$defaults);
     }
 
 //    public function doRun(InputInterface $input, OutputInterface $output)
