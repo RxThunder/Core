@@ -10,11 +10,12 @@
 
 This repository is the core library of the Thunder micro CLI framework.
 
-The aims is to provide a simple extensible kernel with DI.
+The aim is to provide a simple extensible kernel with DI.
 
 ## Todos
 - [X] Add Eventstore persistent subcription console
 - [X] Add RabbitMq console
+- [X] Add JSON schema validation of messages (part of thunder-model lib)
 - [ ] Add CRON console
 - [ ] Add Eventstore projection creation command
 - [ ] Add Eventstore persistent subscription creation command
@@ -24,4 +25,3 @@ The aims is to provide a simple extensible kernel with DI.
 - [ ] Extract RabbitMQ code into a plugin
 - [ ] Extract CRON console code into a plugin
 - [ ] Make AbstractSubject optional in the router
-- [ ] Add JSON schema validation of messages
