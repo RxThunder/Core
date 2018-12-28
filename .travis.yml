@@ -1,0 +1,29 @@
+language: php
+
+php:
+  - 7.2
+  - 7.3
+  - nightly
+
+env:
+  global:
+    - PATH="$HOME/.composer/vendor/bin:$PATH"
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.2
+      env: COMPOSER_FLAGS="--prefer-lowest"
+  allow_failures:
+    - php: 7.3
+    - php: nightly
+
+install:
+  - composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
+
+script:
+  - vendor/bin/grumphp run
