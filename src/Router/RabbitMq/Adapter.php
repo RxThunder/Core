@@ -19,7 +19,6 @@ final class Adapter
 
     public function __invoke(Message $message)
     {
-        $message->getData();
         $type = $message->getRoutingKey();
         $data = $message->getData();
 
