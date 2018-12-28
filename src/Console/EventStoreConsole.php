@@ -112,7 +112,7 @@ final class EventStoreConsole extends AbstractConsole implements LoggerAwareInte
         \Throwable $throwable = null
     ) {
         $this->logger->error($message, [
-            'exception' => $throwable
+            'exception' => $throwable,
         ]);
     }
 }
