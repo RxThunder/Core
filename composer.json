@@ -20,10 +20,11 @@
     "symfony/routing": "^4.1",
     "justinrainbow/json-schema": "^5.2",
     "rxnet/eventstore-client": "dev-master",
-    "rxnet/rabbitmq": "^0.1.0"
+    "rxnet/rabbitmq": "^0.1.0",
+    "voryx/event-loop": "^3.0"
   },
   "require-dev": {
-    "phpstan/phpstan": "^0.10",
+    "phpstan/phpstan": "dev-master",
     "friendsofphp/php-cs-fixer": "^2.12",
     "phpro/grumphp": "^0.14.3",
     "sensiolabs/security-checker": "^5.0"

@@ -3,4 +3,6 @@ parameters:
 		- %rootDir%/../../../vendor
 
 	ignoreErrors:
-	    - '#LibEventLoop given#'
+		-
+		    message: "#Offset '[user|pass]+' does not exist#"
+		    path: %currentWorkingDirectory%/src/Console/EventStoreConsole.php
