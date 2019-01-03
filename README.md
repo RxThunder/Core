@@ -5,6 +5,10 @@
 <a href="https://packagist.org/packages/th3mouk/thunder"><img src="https://poser.pugx.org/th3mouk/thunder/d/total.svg" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/th3mouk/thunder"><img src="https://poser.pugx.org/th3mouk/thunder/license.svg" alt="License"></a>
 </p>
+<p align="center">
+<a href="https://travis-ci.org/Th3Mouk/Thunder"><img src="https://travis-ci.org/Th3Mouk/Thunder.svg?branch=master" alt="Build"></a>
+<p align="center">
+
 
 ## About Thunder
 
