@@ -9,6 +9,7 @@
 
 namespace Th3Mouk\Thunder\Console;
 
+use EventLoop\EventLoop;
 use Rx\Scheduler;
 use Rxnet\RabbitMq\Client;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -53,7 +54,7 @@ final class RabbitMqConsole extends AbstractConsole
         Scheduler::setDefaultFactory(
             function () {
                 // The getLoop method auto start loop
-                return new Scheduler\EventLoopScheduler(\EventLoop\getLoop());
+                return new Scheduler\EventLoopScheduler(EventLoop::getLoop());
             }
         );
 
@@ -62,7 +63,7 @@ final class RabbitMqConsole extends AbstractConsole
 //            $this->middlewareProvider->append($this->container->get("middleware.{$middleware}"));
 //        }
 
-        $bunny = new Client(\EventLoop\getLoop(), [
+        $bunny = new Client(EventLoop::getLoop(), [
             'host' => $this->parameterBag->get("rabbit.{$connection}.host"),
             'port' => $this->parameterBag->get("rabbit.{$connection}.port"),
             'vhost' => $this->parameterBag->get("rabbit.{$connection}.vhost"),
