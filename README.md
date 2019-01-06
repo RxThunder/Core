@@ -21,8 +21,8 @@ The aim is to provide a simple extensible kernel with DI.
 - [X] Add RabbitMq console
 - [X] Add JSON schema validation of messages (part of thunder-model lib)
 - [ ] Add CRON console
-- [ ] Add Eventstore projection creation command
-- [ ] Add Eventstore persistent subscription creation command
+- [X] Add Eventstore projection creation command
+- [X] Add Eventstore persistent subscription creation command
 - [ ] Add auto creation/binding queue rabbit at start
 - [ ] Implement an extension/plugin system
 - [ ] Extract EventStore code into a plugin
