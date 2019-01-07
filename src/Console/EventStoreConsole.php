@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Th3Mouk\Thunder\Console;
+namespace RxThunder\Core\Console;
 
 use EventLoop\EventLoop;
 use Psr\Log\LoggerAwareInterface;
@@ -15,10 +15,10 @@ use Psr\Log\LoggerAwareTrait;
 use Rx\Observer\CallbackObserver;
 use Rxnet\EventStore\EventStore;
 use Rxnet\EventStore\Exception\NotMasterException;
+use RxThunder\Core\Router\AbstractSubject;
+use RxThunder\Core\Router\EventStore\Adapter;
+use RxThunder\Core\Router\Router;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Th3Mouk\Thunder\Router\AbstractSubject;
-use Th3Mouk\Thunder\Router\EventStore\Adapter;
-use Th3Mouk\Thunder\Router\Router;
 
 final class EventStoreConsole extends AbstractConsole implements LoggerAwareInterface
 {

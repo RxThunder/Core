@@ -7,11 +7,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Th3Mouk\Thunder\Router\EventStore;
+namespace RxThunder\Core\Router\EventStore;
 
 use Rx\Observable;
 use Rxnet\EventStore\AcknowledgeableEventRecord;
-use Th3Mouk\Thunder\Router\DataModel;
+use RxThunder\Core\Router\DataModel;
 
 final class Adapter
 {

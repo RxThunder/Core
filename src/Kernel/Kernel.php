@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Th3Mouk\Thunder\Kernel;
+namespace RxThunder\Core\Kernel;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;

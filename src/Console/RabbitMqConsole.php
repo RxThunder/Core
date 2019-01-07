@@ -7,14 +7,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Th3Mouk\Thunder\Console;
+namespace RxThunder\Core\Console;
 
 use EventLoop\EventLoop;
 use Rx\Scheduler;
 use Rxnet\RabbitMq\Client;
+use RxThunder\Core\Router\RabbitMq\Adapter;
+use RxThunder\Core\Router\Router;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Th3Mouk\Thunder\Router\RabbitMq\Adapter;
-use Th3Mouk\Thunder\Router\Router;
 
 final class RabbitMqConsole extends AbstractConsole
 {

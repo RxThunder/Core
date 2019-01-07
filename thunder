@@ -4,8 +4,8 @@
 require_once __DIR__ . '/../../autoload.php';
 
 use Symfony\Component\Console\Input\ArgvInput;
-use Th3Mouk\Thunder\Application;
-use Th3Mouk\Thunder\Kernel\Kernel;
+use RxThunder\Core\Application;
+use RxThunder\Core\Kernel\Kernel;
 
 $input = new ArgvInput();
 $env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'dev');

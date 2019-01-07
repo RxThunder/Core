@@ -9,7 +9,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Th3Mouk\Thunder\Router;
+namespace RxThunder\Core\Router;
 
 abstract class AbstractRoute
 {

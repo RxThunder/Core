@@ -1,6 +1,6 @@
 {
-  "name": "th3mouk/thunder",
-  "description": "Event driven micro CLI framework with Reactive Programming flavors",
+  "name": "rxthunder/core",
+  "description": "Event driven CLI micro framework with Reactive Programming flavors",
   "license": "MIT",
   "authors": [
     {
@@ -32,7 +32,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Th3Mouk\\Thunder\\": "src/"
+      "RxThunder\\Core\\": "src/"
     }
   },
   "bin": ["thunder"]

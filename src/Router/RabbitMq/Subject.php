@@ -7,11 +7,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Th3Mouk\Thunder\Router\RabbitMq;
+namespace RxThunder\Core\Router\RabbitMq;
 
 use Rxnet\RabbitMq\Message;
-use Th3Mouk\Thunder\Router\AbstractSubject;
-use Th3Mouk\Thunder\Router\DataModel;
+use RxThunder\Core\Router\AbstractSubject;
+use RxThunder\Core\Router\DataModel;
 
 final class Subject extends AbstractSubject
 {

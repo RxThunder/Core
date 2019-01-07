@@ -7,12 +7,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Th3Mouk\Thunder;
+namespace RxThunder\Core;
 
+use RxThunder\Core\Kernel\KernelInterface;
 use Silly\Application as BaseApplication;
 use Silly\Input\InputOption;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Th3Mouk\Thunder\Kernel\KernelInterface;
 
 class Application extends BaseApplication
 {
