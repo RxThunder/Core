@@ -73,7 +73,7 @@ final class RabbitMqConsole extends AbstractConsole
 
 //        $this->log->info('Connect to eventStore');
         $bunny
-            ->consume('test', 1)
+            ->consume($queue, 1)
             ->flatMap($this->adapter)
             ->subscribe(
                 function ($subject) {
