@@ -20,7 +20,6 @@ final class Adapter
     public function __invoke(Message $message)
     {
         $type = $message->getRoutingKey();
-        $data = $message->getData();
 
 //        $this->logger->info("received {$record->getType()} with {$record->getNumber()}@{$record->getStreamId()}");
 
@@ -30,6 +29,11 @@ final class Adapter
             'stream' => $message->redelivered,
             'date' => $message->exchange,
         ];
+
+        // TODO use metadata to specify then encoding type
+        if (null === ($data = json_decode($message->getData(), true))) {
+            throw new \Exception('Cannot decode data');
+        }
 
         $dataModel = new DataModel($type, $data, $metadata);
         $subject = new Subject($dataModel, $message);
