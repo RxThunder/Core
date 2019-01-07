@@ -1,18 +1,18 @@
 <p align="center"><img src="./resources/thunder-logo.svg"></p>
 
 <p align="center">
-<a href="https://packagist.org/packages/th3mouk/thunder"><img src="https://poser.pugx.org/th3mouk/thunder/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/th3mouk/thunder"><img src="https://poser.pugx.org/th3mouk/thunder/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/th3mouk/thunder"><img src="https://poser.pugx.org/th3mouk/thunder/license.svg" alt="License"></a>
+<a href="https://packagist.org/packages/rxthunder/core"><img src="https://poser.pugx.org/rxthunder/core/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/rxthunder/core"><img src="https://poser.pugx.org/rxthunder/core/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/rxthunder/core"><img src="https://poser.pugx.org/rxthunder/core/license.svg" alt="License"></a>
 </p>
 <p align="center">
-<a href="https://travis-ci.org/Th3Mouk/Thunder"><img src="https://travis-ci.org/Th3Mouk/Thunder.svg?branch=master" alt="Build"></a>
+<a href="https://travis-ci.org/RxThunder/Core"><img src="https://travis-ci.org/RxThunder/Core.svg?branch=master" alt="Build"></a>
 <p align="center">
 
 
 ## About Thunder
 
-This repository is the core library of the Thunder micro CLI framework.
+This repository is the core library of the Thunder CLI micro framework.
 
 The aim is to provide a simple extensible kernel with DI.
 
