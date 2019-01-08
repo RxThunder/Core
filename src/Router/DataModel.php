@@ -12,14 +12,17 @@ namespace RxThunder\Core\Router;
 final class DataModel
 {
     private $type;
-    private $data;
+    private $payload;
     private $metadata;
 
-    public function __construct($type, $data, $metadata)
-    {
+    public function __construct(
+        string $type,
+        Payload $payload = null,
+        ?array $metadata = []
+    ) {
         $this->type = $type;
-        $this->data = $data ?? [];
-        $this->metadata = $metadata ?? [];
+        $this->payload = $payload ?? new Payload();
+        $this->metadata = $metadata;
     }
 
     public function getType(): string
@@ -27,9 +30,9 @@ final class DataModel
         return $this->type;
     }
 
-    public function getData(): array
+    public function getPayload(): Payload
     {
-        return $this->data;
+        return $this->payload;
     }
 
     public function getMetadata(): array
