@@ -24,7 +24,7 @@ final class EventStoreConsole extends AbstractConsole implements LoggerAwareInte
 {
     use LoggerAwareTrait;
 
-    public static $expression = 'listen:persistent stream group [--middlewares=]* [--timeout=]';
+    public static $expression = 'eventstore:listen:persistent stream group [--middlewares=]* [--timeout=]';
     public static $description = 'EventStore persistent listener for projection';
     public static $argumentsAndOptions = [
         'stream' => 'Persistent subscription name to connect to',

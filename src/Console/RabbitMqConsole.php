@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class RabbitMqConsole extends AbstractConsole
 {
-    public static $expression = 'listen:broker:rabbit queue [connection] [--middlewares=]* [--timeout=]';
+    public static $expression = 'rabbit:listen:broker queue [connection] [--middlewares=]* [--timeout=]';
     public static $description = 'RabbitMq consumer to send command to saga process manager';
     public static $argumentsAndOptions = [
         'queue' => 'Name of the queue to connect to',
