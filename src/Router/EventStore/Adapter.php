@@ -12,6 +12,7 @@ namespace RxThunder\Core\Router\EventStore;
 use Rx\Observable;
 use Rxnet\EventStore\AcknowledgeableEventRecord;
 use RxThunder\Core\Router\DataModel;
+use RxThunder\Core\Router\Payload;
 
 final class Adapter
 {
@@ -19,10 +20,6 @@ final class Adapter
 
     public function __invoke(AcknowledgeableEventRecord $record)
     {
-        $type = $record->getType();
-        $data = $record->getData();
-        $meta = $record->getMetadata();
-
 //        $this->logger->info("received {$record->getType()} with {$record->getNumber()}@{$record->getStreamId()}");
 
         $metadata = [
@@ -30,10 +27,15 @@ final class Adapter
             'stream_id' => $record->getStreamId(),
             'stream' => $record->getNumber().'@'.$record->getStreamId(),
             'date' => $record->getCreated(),
-            'metadata' => $meta,
+            'metadata' => $record->getMetadata(),
         ];
 
-        $dataModel = new DataModel($type, $data, $metadata);
+        $payload = new Payload($record->getData());
+        $dataModel = new DataModel(
+            $record->getType(),
+            $payload,
+            $metadata
+        );
         $subject = new Subject($dataModel, $record);
 
         $subjectObs = $subject->skip(1)->share();
