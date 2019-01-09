@@ -9,13 +9,17 @@
 
 namespace RxThunder\Core\Router\EventStore;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Rx\Observable;
 use Rxnet\EventStore\AcknowledgeableEventRecord;
 use RxThunder\Core\Router\DataModel;
 use RxThunder\Core\Router\Payload;
 
-final class Adapter
+final class Adapter implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     private $timeout = 5000;
 
     public function __invoke(AcknowledgeableEventRecord $record)
@@ -55,10 +59,16 @@ final class Adapter
 //
 //                            return;
 //                        }
+
                     $record->nack($record::NACK_ACTION_SKIP)->subscribe(
                         null,
                         null,
-                        function () use ($record) {echo "nack complete {$record->getNumber()}".PHP_EOL; }
+                        function () use ($e, $record) {
+                            echo "nack complete {$record->getNumber()}".PHP_EOL;
+                            $this->logger->error($e->getMessage(), [
+                                'exception' => $e,
+                            ]);
+                        }
                     );
 //                        $this->logger->debug("[nack-stop] Error {$e->getMessage()}");
                 },

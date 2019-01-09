@@ -9,13 +9,17 @@
 
 namespace RxThunder\Core\Router\RabbitMq;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Rx\Observable;
 use Rxnet\RabbitMq\Message;
 use RxThunder\Core\Router\DataModel;
 use RxThunder\Core\Router\Payload;
 
-final class Adapter
+final class Adapter implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     private $timeout = 5000;
 
     public function __invoke(Message $message)
@@ -57,7 +61,12 @@ final class Adapter
                     $message->nack()->subscribe(
                         null,
                         null,
-                        function () use ($message) {echo "nack complete {$message->getRoutingKey()}".PHP_EOL; }
+                        function () use ($e, $message) {
+                            echo "nack complete {$message->getRoutingKey()}".PHP_EOL;
+                            $this->logger->error($e->getMessage(), [
+                                'exception' => $e,
+                            ]);
+                        }
                     );
 //                        $this->logger->debug("[nack-stop] Error {$e->getMessage()}");
                 },
