@@ -34,6 +34,12 @@ final class Adapter implements LoggerAwareInterface
         ];
 
         $payload = new Payload($message->getData());
+        if (Constants::DATA_FORMAT_JSON === $message->getHeader(Headers::CONTENT_TYPE)) {
+            if (\is_array($arrayData = json_decode($message->getData(), true))) {
+                $payload = new Payload($arrayData);
+            }
+        }
+
         $dataModel = new DataModel(
             $message->getRoutingKey(),
             $payload,
