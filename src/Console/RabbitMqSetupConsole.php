@@ -19,7 +19,7 @@ use Symfony\Component\Finder\Finder;
 final class RabbitMqSetupConsole extends AbstractConsole
 {
     public static $expression = 'rabbit:setup connection [path]';
-    public static $description = 'Add all projections and subscriptions';
+    public static $description = 'Create queue and binding';
 
     public static $argumentsAndOptions = [
         'connection' => 'Name of the connections to use',
