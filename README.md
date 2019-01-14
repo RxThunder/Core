@@ -22,10 +22,10 @@ The aim is to provide a simple extensible kernel with DI.
 - [X] Add JSON schema validation of messages (part of thunder-model lib)
 - [X] Add Eventstore projection creation command
 - [X] Add Eventstore persistent subscription creation command
+- [x] Add RabbitMQ queue/binding creation command
 - [ ] Add Eventstore transient projections consumption
 - [ ] Add Eventstore stream consumption
 - [ ] Add Eventstore specific event consumption
-- [ ] Add auto creation/binding queue rabbit at start
 - [ ] Make AbstractSubject optional in the router
 - [ ] Implement an extension/plugin system
 - [ ] Extract EventStore code into a plugin
