@@ -93,7 +93,8 @@ class Kernel implements KernelInterface
 
     protected function loadEnvironment()
     {
-        (new Dotenv())->load('.env');
+        (new Dotenv())->populate(['APP_ENV' => $this->getEnvironment()]);
+        (new Dotenv())->loadEnv('.env');
     }
 
     public function getProjectDir(): string

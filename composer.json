@@ -16,7 +16,7 @@
     "mnapoli/silly": "^1.7",
     "symfony/config": "^4.1",
     "symfony/dependency-injection": "^4.1",
-    "symfony/dotenv": "^4.1",
+    "symfony/dotenv": "^4.2",
     "symfony/finder": "^4.1",
     "symfony/routing": "^4.1",
     "rxnet/eventstore-client": "dev-master",
