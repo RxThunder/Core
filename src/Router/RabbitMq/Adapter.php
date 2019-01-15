@@ -57,7 +57,7 @@ final class Adapter implements LoggerAwareInterface
             ->subscribe(
                 null,
                 // Return exception from the code
-                function (\Exception $e) use ($message) {
+                function (\Throwable $e) use ($message) {
 //                        if ($e instanceof AcceptableException) {
 //                            await($record->nack($record::NACK_ACTION_SKIP));
 //                            $this->logger->debug("[nack-skip] Acceptable exception: {$e->getMessage()}");
