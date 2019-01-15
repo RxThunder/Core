@@ -8,7 +8,7 @@ use RxThunder\Core\Application;
 use RxThunder\Core\Kernel\Kernel;
 
 $input = new ArgvInput();
-$env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'dev');
+$env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'local');
 $debug = ($_SERVER['APP_DEBUG'] ?? true) !== '0' && !$input->hasParameterOption(['--no-debug', '']);
 
 $kernel = new Kernel($env, $debug);
