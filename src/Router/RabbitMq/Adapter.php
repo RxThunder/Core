@@ -58,17 +58,20 @@ final class Adapter implements LoggerAwareInterface
             ->subscribe(
                 null,
                 // Return exception from the code
-                function (\Throwable $e) use ($message) {
+                function (\Throwable $e) use ($message, $dataModel) {
                     if ($e instanceof AcceptableException) {
                         $message->ack()->subscribe(
                             null,
                             null,
-                            function () use ($e, $message) {
+                            function () use ($e, $dataModel, $message) {
                                 echo "ack but due to acceptable exception {$message->getRoutingKey()}".PHP_EOL;
 
                                 if ($previous = $e->getPrevious()) {
                                     $this->logger->warning($previous->getMessage(), [
                                         'exception' => $previous,
+                                        'routing_key' => $dataModel->getType(),
+                                        'payload' => $message->getData(),
+                                        'metadata' => $dataModel->getMetadata(),
                                     ]);
                                 }
                             }
