@@ -15,8 +15,8 @@ use Throwable;
 
 final class AcceptableException extends \Exception
 {
-    public function __construct(string $message = '', Throwable $previous = null, int $code = 0)
+    public function __construct(Throwable $previous)
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct('', 0, $previous);
     }
 }
