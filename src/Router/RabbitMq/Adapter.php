@@ -68,7 +68,7 @@ final class Adapter implements LoggerAwareInterface
 
                                 if ($previous = $e->getPrevious()) {
                                     $this->logger->warning($previous->getMessage(), [
-                                        'exception' => $previous->getPrevious(),
+                                        'exception' => $previous,
                                     ]);
                                 }
                             }
