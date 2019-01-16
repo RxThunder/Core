@@ -15,6 +15,7 @@ use Rx\Observable;
 use Rxnet\RabbitMq\Message;
 use RxThunder\Core\Router\DataModel;
 use RxThunder\Core\Router\Payload;
+use RxThunder\Core\Router\RabbitMq\Exception\AcceptableException;
 
 final class Adapter implements LoggerAwareInterface
 {
@@ -58,17 +59,29 @@ final class Adapter implements LoggerAwareInterface
                 null,
                 // Return exception from the code
                 function (\Throwable $e) use ($message) {
-//                        if ($e instanceof AcceptableException) {
-//                            await($record->nack($record::NACK_ACTION_SKIP));
-//                            $this->logger->debug("[nack-skip] Acceptable exception: {$e->getMessage()}");
-//
-//                            return;
-//                        }
+                    if ($e instanceof AcceptableException) {
+                        $message->ack()->subscribe(
+                            null,
+                            null,
+                            function () use ($e, $message) {
+                                echo "ack but due to acceptable exception {$message->getRoutingKey()}".PHP_EOL;
+
+                                if ($previous = $e->getPrevious()) {
+                                    $this->logger->warning($previous->getMessage(), [
+                                        'exception' => $previous->getPrevious(),
+                                    ]);
+                                }
+                            }
+                        );
+
+                        return;
+                    }
+
                     $message->nack()->subscribe(
                         null,
                         null,
                         function () use ($e, $message) {
-                            echo "nack complete {$message->getRoutingKey()}".PHP_EOL;
+                            echo "nack {$message->getRoutingKey()}".PHP_EOL;
                             $this->logger->error($e->getMessage(), [
                                 'exception' => $e,
                             ]);
@@ -80,7 +93,7 @@ final class Adapter implements LoggerAwareInterface
                     $message->ack()->subscribe(
                         null,
                         null,
-                        function () {echo 'ack complete'.PHP_EOL; }
+                        function () {echo 'ack'.PHP_EOL; }
                     );
 //                        $this->logger->debug('[ack] Completed');
                 }
