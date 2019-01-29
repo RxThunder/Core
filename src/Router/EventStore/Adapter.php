@@ -64,7 +64,9 @@ final class Adapter implements LoggerAwareInterface
                         null,
                         null,
                         function () use ($e, $record) {
-                            echo "nack complete {$record->getNumber()}".PHP_EOL;
+                            echo "Message {$record->getType()} has been nack".PHP_EOL;
+                            echo "Reason: {$e->getMessage()}".PHP_EOL;
+                            echo "This occurs in {$e->getFile()} @line {$e->getLine()}".PHP_EOL;
                             $this->logger->error($e->getMessage(), [
                                 'exception' => $e,
                             ]);

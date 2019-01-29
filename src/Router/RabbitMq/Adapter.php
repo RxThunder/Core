@@ -84,7 +84,9 @@ final class Adapter implements LoggerAwareInterface
                         null,
                         null,
                         function () use ($e, $message) {
-                            echo "nack {$message->getRoutingKey()}".PHP_EOL;
+                            echo "Message {$message->getRoutingKey()} has been nack".PHP_EOL;
+                            echo "Reason: {$e->getMessage()}".PHP_EOL;
+                            echo "This occurs in {$e->getFile()} @line {$e->getLine()}".PHP_EOL;
                             $this->logger->error($e->getMessage(), [
                                 'exception' => $e,
                             ]);
