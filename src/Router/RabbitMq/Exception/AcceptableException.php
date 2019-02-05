@@ -13,7 +13,7 @@ namespace RxThunder\Core\Router\RabbitMq\Exception;
 
 use Throwable;
 
-final class AcceptableException extends \Exception
+class AcceptableException extends \Exception
 {
     public function __construct(Throwable $previous)
     {
