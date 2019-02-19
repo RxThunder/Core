@@ -21,7 +21,31 @@ final class Adapter implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    private $timeout = 5000;
+    /**
+     * @var int|null
+     */
+    private $timeout;
+
+    /**
+     * @var bool
+     */
+    private $rejectToBottom;
+
+    public function __construct()
+    {
+        $this->timeout = null;
+        $this->rejectToBottom = false;
+    }
+
+    public function setTimeout(int $timeout)
+    {
+        $this->timeout = $timeout;
+    }
+
+    public function rejectToBottomInsteadOfNacking()
+    {
+        $this->rejectToBottom = true;
+    }
 
     public function __invoke(Message $message)
     {
@@ -52,58 +76,75 @@ final class Adapter implements LoggerAwareInterface
 
 //        $subjectObs->subscribe($this->logger);
 
-        $subjectObs
+        if (null !== $this->timeout) {
             // Give only x ms to execute
-            ->timeout($this->timeout)
+            $subjectObs = $subjectObs->timeout($this->timeout);
+        }
+
+        $subjectObs
             ->subscribe(
                 null,
                 // Return exception from the code
                 function (\Throwable $e) use ($message, $dataModel) {
                     if ($e instanceof AcceptableException) {
-                        $message->ack()->subscribe(
-                            null,
-                            null,
-                            function () use ($e, $dataModel, $message) {
-                                echo "ack but due to acceptable exception {$message->getRoutingKey()}".PHP_EOL;
-
-                                if ($previous = $e->getPrevious()) {
-                                    $this->logger->warning($previous->getMessage(), [
-                                        'exception' => $previous,
-                                        'routing_key' => $dataModel->getType(),
-                                        'payload' => $message->getData(),
-                                        'metadata' => $dataModel->getMetadata(),
-                                    ]);
-                                }
-                            }
-                        );
+                        $this->handleAcceptableException($message, $dataModel, $e);
 
                         return;
                     }
 
-                    $message->nack()->subscribe(
-                        null,
-                        null,
-                        function () use ($e, $message) {
-                            echo "Message {$message->getRoutingKey()} has been nack".PHP_EOL;
-                            echo "Reason: {$e->getMessage()}".PHP_EOL;
-                            echo "This occurs in {$e->getFile()} @line {$e->getLine()}".PHP_EOL;
-                            $this->logger->error($e->getMessage(), [
-                                'exception' => $e,
-                            ]);
-                        }
-                    );
-//                        $this->logger->debug("[nack-stop] Error {$e->getMessage()}");
+                    $this->handleException($message, $e);
+                // $this->logger->debug("[nack-stop] Error {$e->getMessage()}");
                 },
                 function () use ($message) {
                     $message->ack()->subscribe(
                         null,
                         null,
-                        function () {echo 'ack'.PHP_EOL; }
+                        function () {
+                            echo 'ack'.PHP_EOL;
+                        }
                     );
-//                        $this->logger->debug('[ack] Completed');
+                    // $this->logger->debug('[ack] Completed');
                 }
             );
 
-        return Observable::just($subject);
+        return Observable::of($subject);
+    }
+
+    private function handleAcceptableException(Message $message, DataModel $dataModel, \Throwable $e): void
+    {
+        $message->ack()->subscribe(
+            null,
+            null,
+            function () use ($e, $dataModel, $message) {
+                echo "ack but due to acceptable exception {$message->getRoutingKey()}".PHP_EOL;
+
+                if ($previous = $e->getPrevious()) {
+                    $this->logger->warning($previous->getMessage(), [
+                        'exception' => $previous,
+                        'routing_key' => $dataModel->getType(),
+                        'payload' => $message->getData(),
+                        'metadata' => $dataModel->getMetadata(),
+                    ]);
+                }
+            }
+        );
+    }
+
+    private function handleException(Message $message, \Throwable $e): void
+    {
+        $onCompleted = function () use ($e, $message) {
+            echo "Message {$message->getRoutingKey()} has been nack".PHP_EOL;
+            echo "Reason: {$e->getMessage()}".PHP_EOL;
+            echo "This occurs in {$e->getFile()} @line {$e->getLine()}".PHP_EOL;
+            $this->logger->error($e->getMessage(), [
+                'exception' => $e,
+            ]);
+        };
+
+        if ($this->rejectToBottom) {
+            $message->rejectToBottom()->subscribe(null, null, $onCompleted);
+        } else {
+            $message->nack()->subscribe(null, null, $onCompleted);
+        }
     }
 }
