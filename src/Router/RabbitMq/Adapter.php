@@ -16,6 +16,8 @@ use Rxnet\RabbitMq\Message;
 use RxThunder\Core\Router\DataModel;
 use RxThunder\Core\Router\Payload;
 use RxThunder\Core\Router\RabbitMq\Exception\AcceptableException;
+use RxThunder\Core\Router\RabbitMq\Exception\RejectException;
+use RxThunder\Core\Router\RabbitMq\Exception\RetryLaterException;
 
 final class Adapter implements LoggerAwareInterface
 {
@@ -25,21 +27,30 @@ final class Adapter implements LoggerAwareInterface
      * @var int|null
      */
     private $timeout;
-
     /**
      * @var bool
      */
     private $rejectToBottom;
+    /**
+     * @var string|null
+     */
+    private $delayedExchangeName;
 
     public function __construct()
     {
         $this->timeout = null;
         $this->rejectToBottom = false;
+        $this->delayedExchangeName = null;
     }
 
     public function setTimeout(int $timeout)
     {
         $this->timeout = $timeout;
+    }
+
+    public function setDelayedExchangeName(string $name)
+    {
+        $this->delayedExchangeName = $name;
     }
 
     public function rejectToBottomInsteadOfNacking()
@@ -56,6 +67,7 @@ final class Adapter implements LoggerAwareInterface
             'stream_id' => $message->deliveryTag,
             'stream' => $message->redelivered,
             'date' => $message->exchange,
+            'headers' => $message->headers,
         ];
 
         $payload = new Payload($message->getData());
@@ -92,6 +104,18 @@ final class Adapter implements LoggerAwareInterface
                         return;
                     }
 
+                    if ($e instanceof RejectException) {
+                        $this->handleRejectException($message, $e);
+
+                        return;
+                    }
+
+                    if ($e instanceof RetryLaterException) {
+                        $this->handleRetryLaterException($message, $e);
+
+                        return;
+                    }
+
                     $this->handleException($message, $e);
                 // $this->logger->debug("[nack-stop] Error {$e->getMessage()}");
                 },
@@ -110,7 +134,7 @@ final class Adapter implements LoggerAwareInterface
         return Observable::of($subject);
     }
 
-    private function handleAcceptableException(Message $message, DataModel $dataModel, \Throwable $e): void
+    private function handleAcceptableException(Message $message, DataModel $dataModel, AcceptableException $e): void
     {
         $message->ack()->subscribe(
             null,
@@ -146,5 +170,41 @@ final class Adapter implements LoggerAwareInterface
         } else {
             $message->nack()->subscribe(null, null, $onCompleted);
         }
+    }
+
+    private function handleRejectException(Message $message, RejectException $e): void
+    {
+        $message->reject(false)->subscribe(
+            null,
+            null,
+            function () use ($e, $message) {
+                echo "Message {$message->getRoutingKey()} has been rejected".PHP_EOL;
+                echo "Reason: {$e->getMessage()}".PHP_EOL;
+                echo "This occurs in {$e->getFile()} @line {$e->getLine()}".PHP_EOL;
+                $this->logger->error($e->getMessage(), [
+                    'exception' => $e,
+                ]);
+            }
+        );
+    }
+
+    private function handleRetryLaterException(Message $message, RetryLaterException $e)
+    {
+        if (null === $this->delayedExchangeName) {
+            throw new \Exception('You cannot use the RetryLaterException without a delayedExchange name');
+        }
+
+        $message->retryLater($e->getDelay(), $this->delayedExchangeName)->subscribe(
+            null,
+            null,
+            function () use ($e, $message) {
+                echo "Message {$message->getRoutingKey()} has been requeued for later".PHP_EOL;
+                echo "Reason: {$e->getMessage()}".PHP_EOL;
+                echo "This occurs in {$e->getFile()} @line {$e->getLine()}".PHP_EOL;
+                $this->logger->warning($e->getMessage(), [
+                    'exception' => $e,
+                ]);
+            }
+        );
     }
 }
