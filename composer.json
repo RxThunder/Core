@@ -35,5 +35,7 @@
       "RxThunder\\Core\\": "src/"
     }
   },
-  "bin": ["thunder"]
+  "bin": [
+    "bin/thunder"
+  ]
 }
