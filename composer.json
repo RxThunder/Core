@@ -19,7 +19,7 @@
     "symfony/dotenv": "^4.2",
     "symfony/finder": "^4.1",
     "symfony/routing": "^4.1",
-    "rxnet/eventstore-client": "^2.3 || ^3.0",
+    "rxnet/eventstore-client": "^2.3",
     "rxnet/rabbitmq": "^0.1.0",
     "voryx/event-loop": "^3.0",
     "guzzlehttp/guzzle": "^6.3"
