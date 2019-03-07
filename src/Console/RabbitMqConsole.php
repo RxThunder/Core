@@ -19,21 +19,23 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class RabbitMqConsole extends AbstractConsole
 {
-    public static $expression = 'rabbit:listen:broker queue [connection] [--middlewares=]* [--timeout=] [--max-retry=] [--max-retry-routing-key=] [--delayed-exchange-name=]';
+    public static $expression = 'rabbit:listen:broker queue [connection] [--middlewares=]* [--timeout=] [--max-retry=] [--retry-routing-key=] [--retry-exchange=] [--delayed-exchange-name=]';
     public static $description = 'RabbitMq consumer to send command to saga process manager';
     public static $argumentsAndOptions = [
         'queue' => 'Name of the queue to connect to',
         'connection' => 'RabbitMq instance to connect to',
         '--timeout' => 'If the timeout is reached, the message will be nacked (use -1 for no timeout)',
         '--max-retry' => 'The max retried number of times (-1 for no max retry)',
-        '--max-retry-routing-key' => 'If the max-retry option is activated, the name of the routing key where to put the failing message',
+        '--retry-routing-key' => 'If the max-retry option is activated, the name of the routing key for the failed message',
+        '--retry-exchange' => 'If the max-retry option is activated, the retry exchange name where to put the failed message',
         '--delayed-exchange-name' => 'The delayed exchange\'s name. This is used when you want to retry a message after a given delay. To use this you need to have an exchange with the type "x-delayed-message". See https://github.com/rabbitmq/rabbitmq-delayed-message-exchange for more information',
     ];
 
     public static $defaults = [
         'timeout' => 10000,
         'max-retry' => -1,
-        'max-retry-routing-key' => '/failed-message',
+        'retry-routing-key' => '/failed-message',
+        'retry-exchange' => 'amq.direct',
         'delayed-exchange-name' => 'direct.delayed',
     ];
 
@@ -57,7 +59,8 @@ final class RabbitMqConsole extends AbstractConsole
         array $middlewares,
         int $timeout,
         int $maxRetry,
-        string $maxRetryRoutingKey,
+        string $retryRoutingKey,
+        string $retryExchange,
         string $delayedExchangeName
     ) {
         $this->setup($timeout, $maxRetry, $delayedExchangeName);
@@ -74,7 +77,7 @@ final class RabbitMqConsole extends AbstractConsole
 
         $bunny
             ->consume($queue, 1)
-            ->flatMap(function (Message $message) use ($connection, $maxRetry, $maxRetryRoutingKey) {
+            ->flatMap(function (Message $message) use ($connection, $maxRetry, $retryRoutingKey, $retryExchange) {
                 // Handle the number of times the message has been tried if the option is active
                 if (-1 !== $maxRetry) {
                     $tried = (int) $message->getHeader(Message::HEADER_TRIED, 0);
@@ -84,10 +87,10 @@ final class RabbitMqConsole extends AbstractConsole
                         $message->headers = array_merge($message->headers, ['Failed-message-routing-key' => $message->getRoutingKey()]);
 
                         return $this->getBunny($connection)
-                            ->produce($message->getData(), $maxRetryRoutingKey, 'amq.direct', $message->headers)
+                            ->produce($message->getData(), $retryRoutingKey, $retryExchange, $message->headers)
                             ->doOnCompleted(
-                                function () use ($message, $maxRetryRoutingKey) {
-                                    echo "Message {$message->getRoutingKey()} was send to {$maxRetryRoutingKey}";
+                                function () use ($message, $retryRoutingKey) {
+                                    echo "Message {$message->getRoutingKey()} was send to {$retryRoutingKey}".PHP_EOL;
 
                                     $message->ack();
                                 }
