@@ -8,26 +8,24 @@
       "email": "marodon.jeremy@gmail.com"
     }
   ],
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "require": {
     "php": "^7.2",
     "ext-json": "*",
-    "mnapoli/silly": "^1.7",
+    "mnapoli/silly": "^1.7.1",
     "symfony/config": "^4.1",
     "symfony/dependency-injection": "^4.1",
     "symfony/dotenv": "^4.2",
     "symfony/finder": "^4.1",
     "symfony/routing": "^4.1",
-    "rxnet/rabbitmq": "^0.1.0",
     "rxnet/eventstore-client": "^3.0.1",
+    "rxnet/rabbitmq": "^0.1.1",
     "voryx/event-loop": "^3.0",
-    "guzzlehttp/guzzle": "^6.3"
+    "guzzlehttp/guzzle": "^6.3.3"
   },
   "require-dev": {
-    "phpstan/phpstan": "dev-master",
+    "phpstan/phpstan": "0.11.2",
     "friendsofphp/php-cs-fixer": "^2.12",
-    "phpro/grumphp": "^0.14.3",
+    "phpro/grumphp": "^0.15.0",
     "sensiolabs/security-checker": "^5.0"
   },
   "autoload": {
