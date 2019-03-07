@@ -18,11 +18,11 @@ use Symfony\Component\Dotenv\Dotenv;
 class Kernel implements KernelInterface
 {
     const NAME = 'Thunder';
-    const VERSION = '0.4.9';
-    const VERSION_ID = '00409';
+    const VERSION = '0.4.10';
+    const VERSION_ID = '00410';
     const MAJOR_VERSION = 0;
     const MINOR_VERSION = 4;
-    const RELEASE_VERSION = 9;
+    const RELEASE_VERSION = 10;
     const EXTRA_VERSION = '';
 
     protected $environment;
