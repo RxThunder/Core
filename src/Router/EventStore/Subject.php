@@ -9,7 +9,7 @@
 
 namespace RxThunder\Core\Router\EventStore;
 
-use Rxnet\EventStore\AcknowledgeableEventRecord;
+use Rxnet\EventStore\Record\AcknowledgeableEventRecord;
 use RxThunder\Core\Router\AbstractSubject;
 use RxThunder\Core\Router\DataModel;
 

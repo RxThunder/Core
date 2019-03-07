@@ -12,7 +12,7 @@ namespace RxThunder\Core\Router\EventStore;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Rx\Observable;
-use Rxnet\EventStore\AcknowledgeableEventRecord;
+use Rxnet\EventStore\Record\AcknowledgeableEventRecord;
 use RxThunder\Core\Router\DataModel;
 use RxThunder\Core\Router\Payload;
 
