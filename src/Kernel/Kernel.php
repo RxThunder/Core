@@ -34,11 +34,11 @@ class Kernel implements KernelInterface
     /**
      * Kernel constructor.
      */
-    public function __construct(string $environment, bool $debug = false)
+    public function __construct(string $environment, bool $debug = false, ?string $projectDir = null)
     {
         $this->environment = $environment;
         $this->debug = $debug;
-        $this->projectDir = $this->getProjectDir();
+        $this->projectDir = $projectDir ?? $this->getProjectDir();
     }
 
     public function boot()
