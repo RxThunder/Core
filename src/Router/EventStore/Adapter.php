@@ -75,10 +75,12 @@ final class Adapter implements LoggerAwareInterface
 //                        $this->logger->debug("[nack-stop] Error {$e->getMessage()}");
                 },
                 function () use ($record) {
+                    $date = new \DateTimeImmutable();
+
                     $record->ack()->subscribe(
                         null,
                         null,
-                        function () {echo 'ack complete'.PHP_EOL; }
+                        function () use ($record, $date) { echo $date->format(DATE_ISO8601).' > '.$record->getType().' > ack'.PHP_EOL; }
                     );
 //                        $this->logger->debug('[ack] Completed');
                 }
