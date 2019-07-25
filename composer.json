@@ -18,7 +18,6 @@
     "symfony/finder": "^4.1",
     "symfony/routing": "^4.1",
     "rxnet/eventstore-client": "^3.0.1",
-    "rxnet/rabbitmq": "^0.1.1",
     "voryx/event-loop": "^3.0",
     "guzzlehttp/guzzle": "^6.3.3"
   },

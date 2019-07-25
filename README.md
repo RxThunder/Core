@@ -16,6 +16,10 @@ This repository is the core library of the Thunder CLI micro framework.
 
 The aim is to provide a simple extensible kernel with DI.
 
+## Plugins 
+
+- [RabbitMQ](https://github.com/RxThunder/RabbitMQ) consumer and helpers
+
 ## Todos
 - [X] Add Eventstore persistent subcription console
 - [X] Add RabbitMq console
@@ -23,12 +27,12 @@ The aim is to provide a simple extensible kernel with DI.
 - [X] Add Eventstore projection creation command
 - [X] Add Eventstore persistent subscription creation command
 - [x] Add RabbitMQ queue/binding creation command
+- [X] Extract RabbitMQ code into a plugin
 - [ ] Add Eventstore transient projections consumption
 - [ ] Add Eventstore stream consumption
 - [ ] Add Eventstore specific event consumption
 - [ ] Make AbstractSubject optional in the router
 - [ ] Implement an extension/plugin system
 - [ ] Extract EventStore code into a plugin
-- [ ] Extract RabbitMQ code into a plugin
 - [ ] Add CRON console
 - [ ] Extract CRON console code into a plugin
