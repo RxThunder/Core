@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Thunder micro CLI framework.
  * (c) Jérémy Marodon <marodon.jeremy@gmail.com>
@@ -7,18 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace RxThunder\Core\Router\Exception;
+namespace RxThunder\Core\Model\Exception;
 
 final class InvalidFormatException extends \RuntimeException
 {
-    public function __construct($data, $expected)
+    public function __construct(string $data, string $expected)
     {
-        $message = sprintf(
-            'Unexpected call on the payload, data contained are a(n) %s, and %s expected',
-            \gettype($data),
-            $expected
-        );
-
-        parent::__construct($message);
+        parent::__construct("Unexpected call on the payload, data contained are a(n) $data, and $expected expected");
     }
 }

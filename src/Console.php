@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Thunder micro CLI framework.
  * (c) Jérémy Marodon <marodon.jeremy@gmail.com>
@@ -7,30 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace RxThunder\Core\Console;
+namespace RxThunder\Core;
 
 /**
  * @see https://github.com/mnapoli/silly/blob/master/docs/command-definition.md#command-definition
  */
-abstract class AbstractConsole
+abstract class Console
 {
-    /**
-     * @var string
-     */
-    public static $expression = '';
+    public static string $expression = '';
 
-    /**
-     * @var string
-     */
-    public static $description = '';
+    public static string $description = '';
 
-    /**
-     * @var iterable
-     */
-    public static $argumentsAndOptions = [];
+    /** @var array<string, string> */
+    public static array $arguments_and_options = [];
 
-    /**
-     * @var iterable
-     */
-    public static $defaults = [];
+    /** @var array<string, bool|float|int|string> */
+    public static array $defaults = [];
 }

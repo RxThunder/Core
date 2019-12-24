@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Thunder micro CLI framework.
  * (c) Jérémy Marodon <marodon.jeremy@gmail.com>
@@ -15,12 +17,12 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class RoutePass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
-        $routerDefinition = $container->getDefinition(Router::class);
-        $routes = $container->findTaggedServiceIds('route');
-        foreach ($routes as $serviceId => $tagAttributes) {
-            $routerDefinition->addMethodCall('addRoute', [new Reference($serviceId)]);
+        $router_definition = $container->getDefinition(Router::class);
+        $routes            = $container->findTaggedServiceIds('route');
+        foreach ($routes as $service_id => $tag_attributes) {
+            $router_definition->addMethodCall('addRoute', [new Reference($service_id)]);
         }
     }
 }

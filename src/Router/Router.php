@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Thunder micro CLI framework.
  * (c) Jérémy Marodon <marodon.jeremy@gmail.com>
@@ -9,35 +11,25 @@
 
 namespace RxThunder\Core\Router;
 
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
-
 class Router
 {
-    protected $collection;
-    protected $matcher;
+    protected RouteCollection $collection;
+    protected Matcher $matcher;
 
     public function __construct()
     {
         $this->collection = new RouteCollection();
-        $this->matcher = new Matcher($this->collection);
+        $this->matcher    = new Matcher($this->collection);
     }
 
-    public function __invoke(AbstractSubject $subject)
+    public function match(string $route_path): Route
     {
-        if (null === $route = ($this->matcher)($subject)) {
-            return;
-        }
-
-        $route($subject);
+        return $this->matcher->match($route_path);
     }
 
-    public function addRoute(AbstractRoute $route)
+    public function addRoute(Route $route): self
     {
-        $this->collection->add(
-            \get_class($route),
-            new Route($route->getRoutePath(), ['_controller' => $route])
-        );
+        $this->collection->add($route);
 
         return $this;
     }

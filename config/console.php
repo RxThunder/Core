@@ -1,14 +1,6 @@
 <?php
 
-use Symfony\Component\DependencyInjection\Definition;
-use RxThunder\Core\Console\AbstractConsole;
+use RxThunder\Core\Console;
 
-$definition = new Definition();
-$definition->setPublic(true);
-$definition->setAutowired(true);
-$definition->setAutoconfigured(true);
-
-$container->registerForAutoconfiguration(AbstractConsole::class)
+$container->registerForAutoconfiguration(Console::class)
     ->addTag('console');
-
-$this->registerClasses($definition, 'RxThunder\\Core\\Console\\', '../src/Console');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Thunder micro CLI framework.
  * (c) Jérémy Marodon <marodon.jeremy@gmail.com>
@@ -9,29 +11,23 @@
 
 namespace RxThunder\Core\Router;
 
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
+use RxThunder\Core\Router\Exception\RouteNotFoundException;
 
 class Matcher
 {
-    protected $routes;
+    protected RouteCollection $routes;
 
     public function __construct(RouteCollection $routes)
     {
         $this->routes = $routes;
     }
 
-    public function __invoke(AbstractSubject $subject)
+    public function match(string $type): ?Route
     {
-        try {
-            return (new UrlMatcher($this->routes, new RequestContext()))
-                ->match($subject->getRoutingPath())['_controller'];
-        } catch (ResourceNotFoundException $e) {
-            $subject->onError($e);
-
-            return null;
+        if ($route = $this->routes->get($type)) {
+            return $route;
         }
+
+        throw new RouteNotFoundException($type);
     }
 }
