@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Thunder micro CLI framework.
  * (c) Jérémy Marodon <marodon.jeremy@gmail.com>
@@ -12,38 +14,41 @@ namespace RxThunder\Core;
 use RxThunder\Core\Kernel\KernelInterface;
 use Silly\Application as BaseApplication;
 use Silly\Input\InputOption;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class Application extends BaseApplication
 {
     public function __construct(KernelInterface $kernel)
     {
-        $kernelClass = \get_class($kernel);
+        $kernel_class = \get_class($kernel);
         $kernel->boot();
 
-        parent::__construct($kernelClass::NAME, $kernelClass::VERSION);
-        $this->useContainer($kernel->getContainer());
+        parent::__construct($kernel_class::NAME, $kernel_class::VERSION);
+
+        $container = $kernel->getContainer();
+        $this->useContainer($container);
 
         $this->getDefinition()->addOptions([
-            new InputOption('--env', '-e', InputOption::VALUE_OPTIONAL, 'The environment name',
-                $kernel->getEnvironment()),
+            new InputOption(
+                '--env',
+                '-e',
+                InputOption::VALUE_OPTIONAL,
+                'The environment name',
+                $kernel->getEnvironment()
+            ),
         ]);
 
-        /** @var ContainerBuilder $container */
-        $container = $kernel->getContainer();
+        $console_services_list = $container->findTaggedServiceIds('console');
 
-        $consoleServicesList = $container->findTaggedServiceIds('console');
-
-        foreach ($consoleServicesList as $id => $tag) {
+        foreach ($console_services_list as $id => $tag) {
             $this->registerConsole($id);
         }
     }
 
-    private function registerConsole(string $console)
+    private function registerConsole(string $console_class): void
     {
         $this
-            ->command($console::$expression, $console)
-            ->descriptions($console::$description, $console::$argumentsAndOptions)
-            ->defaults($console::$defaults);
+            ->command($console_class::$expression, $console_class)
+            ->descriptions($console_class::$description, $console_class::$arguments_and_options)
+            ->defaults($console_class::$defaults);
     }
 }

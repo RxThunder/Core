@@ -9,16 +9,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace RxThunder\Core\Router;
+namespace RxThunder\Core\Router\Exception;
 
-abstract class AbstractRoute
+final class RouteNotFoundException extends \RuntimeException
 {
-    public const PATH = '/';
-
-    abstract public function __invoke(AbstractSubject $subject);
-
-    public function getRoutePath(): string
+    public function __construct(string $route)
     {
-        return static::PATH;
+        parent::__construct("Route {$route} has not been found by the matcher in the router");
     }
 }

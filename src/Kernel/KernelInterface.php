@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Thunder micro CLI framework.
  * (c) Jérémy Marodon <marodon.jeremy@gmail.com>
@@ -9,7 +11,7 @@
 
 namespace RxThunder\Core\Kernel;
 
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 interface KernelInterface
 {
@@ -17,15 +19,15 @@ interface KernelInterface
 
     public function getConfigDir(): string;
 
-    public function initializeContainer();
+    public function initializeContainer(): void;
 
-    public function boot();
+    public function boot(): void;
 
     public function getEnvironment(): string;
 
-    public function getContainer(): ContainerInterface;
+    public function getContainer(): ContainerBuilder;
 
-    public function isDebug(): bool;
+    public function debugActivated(): bool;
 
-    public function isBooted(): bool;
+    public function booted(): bool;
 }
