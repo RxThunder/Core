@@ -3,13 +3,3 @@ parameters:
     paths: ['src']
     excludes_analyse:
         - %rootDir%/../../../vendor
-    ignoreErrors:
-        -
-            message: "#Offset '[user|pass]+' does not exist#"
-            path: %currentWorkingDirectory%/src/Console/EventStoreConsole.php
-        -
-            message: "#(.*)then(.*)PromiseInterface.#"
-            path: %currentWorkingDirectory%/src/Console/RabbitMqSetupConsole.php
-        -
-            message: "#Call to an undefined method React\\\\Promise\\\\PromiseInterface::done\\(\\)#"
-            path: %currentWorkingDirectory%/src/Console/RabbitMqSetupConsole.php
