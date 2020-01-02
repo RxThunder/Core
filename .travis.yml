@@ -1,9 +1,7 @@
 language: php
 
 php:
-  - 7.2
-  - 7.3
-  - 7.4snapshot
+  - 7.4
   - nightly
 
 env:
@@ -17,14 +15,20 @@ cache:
 matrix:
   fast_finish: true
   include:
-    - php: 7.2
+    - php: 7.4
       env: COMPOSER_FLAGS="--prefer-lowest"
   allow_failures:
-    - php: 7.4snapshot
     - php: nightly
 
 install:
+  - composer require satooshi/php-coveralls:@stable --dev --no-update
   - composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
 
 script:
-  - vendor/bin/grumphp run
+  - mkdir -p build/logs
+  - vendor/bin/phpstan analyse
+  - vendor/bin/phpcs
+  - vendor/bin/phpunit
+
+after_success:
+  - travis_retry php vendor/bin/php-coveralls --coverage_clover=/tmp/coverage.xml -v
