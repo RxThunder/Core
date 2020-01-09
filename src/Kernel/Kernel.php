@@ -20,12 +20,12 @@ use Symfony\Component\Dotenv\Dotenv;
 class Kernel implements KernelInterface
 {
     public const NAME            = 'Thunder';
-    public const VERSION         = '1.0.0-dev';
+    public const VERSION         = '1.0.0';
     public const VERSION_ID      = 10000;
     public const MAJOR_VERSION   = 1;
     public const MINOR_VERSION   = 0;
     public const RELEASE_VERSION = 0;
-    public const EXTRA_VERSION   = 'dev';
+    public const EXTRA_VERSION   = '';
 
     protected string $environment;
     protected ContainerBuilder $container;
