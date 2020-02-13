@@ -2,15 +2,14 @@
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\NullLogger;
-use Symfony\Component\DependencyInjection\Reference;
+use RxThunder\Core\Logger\LoggerPass;
+use Symfony\Component\DependencyInjection\Definition;
 
-if ($container->hasDefinition('logger')) {
-    $class = new Reference('logger');
-} else {
-    $class = new NullLogger();
-}
+$container->setDefinition('logger', new Definition(NullLogger::class));
 
 $container
     ->registerForAutoconfiguration(LoggerAwareInterface::class)
-    ->addMethodCall('setLogger', [$class])
+    ->addTag(LoggerPass::TAG)
 ;
+
+$container->addCompilerPass(new LoggerPass());
