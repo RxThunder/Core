@@ -15,15 +15,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 interface KernelInterface
 {
-    public function getProjectDir(): string;
-
-    public function getConfigDir(): string;
-
-    public function initializeContainer(): void;
-
     public function boot(): void;
 
     public function getEnvironment(): string;
+
+    public function getProjectDir(): string;
+
+    public function getConfigDir(): string;
 
     public function getContainer(): ContainerBuilder;
 
