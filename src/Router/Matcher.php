@@ -22,7 +22,7 @@ class Matcher
         $this->routes = $routes;
     }
 
-    public function match(string $type): ?Route
+    public function match(string $type): Route
     {
         if ($route = $this->routes->get($type)) {
             return $route;

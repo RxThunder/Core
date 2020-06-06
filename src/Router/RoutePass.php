@@ -20,7 +20,9 @@ class RoutePass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         $router_definition = $container->getDefinition(Router::class);
-        $routes            = $container->findTaggedServiceIds('route');
+
+        /** @psalm-var array<class-string, array<string, string>> $routes */
+        $routes = $container->findTaggedServiceIds('route');
         foreach ($routes as $service_id => $tag_attributes) {
             $router_definition->addMethodCall('addRoute', [new Reference($service_id)]);
         }

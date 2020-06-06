@@ -13,11 +13,11 @@ namespace RxThunder\Core\Model;
 
 final class MetadataBag
 {
-    /** @var array<string, bool|int|float|string>  */
+    /** @psalm-var array<string, scalar>  */
     private array $parameters = [];
 
     /**
-     * @param array<mixed, mixed> $parameters
+     * @psalm-param array<string, scalar> $parameters
      */
     public function __construct(array $parameters)
     {
@@ -27,7 +27,7 @@ final class MetadataBag
     }
 
     /**
-     * @param bool|int|float|string $value
+     * @psalm-param scalar $value
      */
     public function add(string $key, $value): self
     {
@@ -44,7 +44,7 @@ final class MetadataBag
     }
 
     /**
-     * @return bool|int|float|string
+     * @psalm-return ?scalar
      */
     public function get(string $key)
     {
