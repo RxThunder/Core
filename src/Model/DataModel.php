@@ -18,12 +18,12 @@ final class DataModel
     private MetadataBag $metadata;
 
     /**
-     * @param array<int|string, bool|int|float|string> $metadata
+     * @psalm-param array<string, scalar> $metadata
      */
     public function __construct(
         string $type,
         ?Payload $payload = null,
-        ?array $metadata = []
+        array $metadata = []
     ) {
         $this->type     = $type;
         $this->payload  = $payload ?? new Payload();

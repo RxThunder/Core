@@ -20,9 +20,10 @@
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.16",
-    "phpstan/phpstan": "^0.12.0",
-    "phpunit/phpunit": "^8.5",
+    "phpstan/phpstan": "^0.12.27",
+    "phpunit/phpunit": "^9.2.2",
     "slevomat/coding-standard": "^6.0 >=6.0.4",
+    "vimeo/psalm": "^3.11",
     "youdot/coding-standard": "^2.0"
   },
   "autoload": {

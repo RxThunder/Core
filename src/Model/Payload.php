@@ -15,11 +15,11 @@ use RxThunder\Core\Model\Exception\InvalidFormatException;
 
 final class Payload
 {
-    /** @var array<mixed, mixed>|string */
+    /** @psalm-var array<array-key, mixed>|string|null */
     private $data;
 
     /**
-     * @param array<mixed, mixed>|string $data
+     * @psalm-param array<array-key, mixed>|string|null $data
      */
     public function __construct($data = null)
     {
@@ -40,7 +40,7 @@ final class Payload
     }
 
     /**
-     * @return array<mixed, mixed>|null
+     * @psalm-return array<array-key, mixed>|null
      */
     public function dataInArrayFormat(): ?array
     {

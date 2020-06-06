@@ -21,6 +21,7 @@ final class LoggerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
+        /** @psalm-var array<class-string, array<string, string>> $tagged_services */
         $tagged_services = $container->findTaggedServiceIds(self::TAG);
 
         foreach ($tagged_services as $id => $tags) {

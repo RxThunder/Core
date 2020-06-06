@@ -38,6 +38,7 @@ class Kernel implements KernelInterface
         $this->environment = $environment;
         $this->debug       = $debug;
         $this->project_dir = $this->initiateProjectDir();
+        $this->container   = new ContainerBuilder();
     }
 
     public function boot(): void
@@ -51,33 +52,30 @@ class Kernel implements KernelInterface
         $this->booted = true;
     }
 
-    public function initializeContainer(): void
+    protected function initializeContainer(): void
     {
-        $container = new ContainerBuilder();
-
         $this->loadEnvironment();
-        $this->loadDefinitions($container);
+        $this->loadDefinitions();
 
-        $container->compile();
-        $this->container = $container;
+        $this->container->compile();
     }
 
-    protected function loadDefinitions(ContainerBuilder $container): void
+    protected function loadDefinitions(): void
     {
-        $container->setParameter('thunder.environment', $this->getEnvironment());
-        $container->setParameter('thunder.debug', $this->debugActivated());
-        $container->setParameter('thunder.project_dir', $this->getProjectDir());
-        $container->setParameter('thunder.config_dir', $this->getConfigDir());
+        $this->container->setParameter('thunder.environment', $this->getEnvironment());
+        $this->container->setParameter('thunder.debug', $this->debugActivated());
+        $this->container->setParameter('thunder.project_dir', $this->getProjectDir());
+        $this->container->setParameter('thunder.config_dir', $this->getConfigDir());
 
         $internal_loader =
             new PhpFileLoader(
-                $container,
+                $this->container,
                 new FileLocator(__DIR__ . '/../../config')
             );
 
         $personal_loader =
             new PhpFileLoader(
-                $container,
+                $this->container,
                 new FileLocator($this->getConfigDir())
             );
 

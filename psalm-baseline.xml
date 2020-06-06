@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="3.11.5@3c60609c218d4d4b3b257728b8089094e5c6c6c2">
+  <file src="src/Application.php">
+    <MixedArgument occurrences="4">
+      <code>$console_class::$expression</code>
+      <code>$console_class::$description</code>
+      <code>$console_class::$arguments_and_options</code>
+      <code>$console_class::$defaults</code>
+    </MixedArgument>
+  </file>
+  <file src="src/Model/MetadataBag.php">
+    <DocblockTypeContradiction occurrences="1">
+      <code>is_scalar($value)</code>
+    </DocblockTypeContradiction>
+  </file>
+  <file src="src/Router/Route.php">
+    <MixedInferredReturnType occurrences="1">
+      <code>string</code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement occurrences="1">
+      <code>static::PATH</code>
+    </MixedReturnStatement>
+  </file>
+</files>

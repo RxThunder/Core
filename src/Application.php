@@ -37,6 +37,7 @@ class Application extends BaseApplication
             ),
         ]);
 
+        /** @psalm-var array<class-string, array<string, string>> $console_services_list */
         $console_services_list = $container->findTaggedServiceIds('console');
 
         foreach ($console_services_list as $id => $tag) {
@@ -44,6 +45,9 @@ class Application extends BaseApplication
         }
     }
 
+    /**
+     * @param class-string $console_class
+     */
     private function registerConsole(string $console_class): void
     {
         $this
