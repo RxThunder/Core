@@ -23,6 +23,17 @@
         <exclude-pattern>tests/skeleton</exclude-pattern>
     </rule>
 
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix">
+        <exclude-pattern>src/Model/Exception/InvalidFormatException.php</exclude-pattern>
+        <exclude-pattern>src/Model/Exception/DataModelException.php</exclude-pattern>
+        <exclude-pattern>src/Kernel/Exception/KernelNotBootedException.php</exclude-pattern>
+        <exclude-pattern>src/Router/Exception/RouteNotFoundException.php</exclude-pattern>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix">
+        <exclude-pattern>src/Kernel/KernelInterface.php</exclude-pattern>
+    </rule>
+
     <!-- Directories to be checked -->
     <file>src</file>
     <file>tests</file>

@@ -13,4 +13,13 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <DeprecatedClass>
+            <errorLevel type="info">
+                <referencedClass name="RxThunder\Core\Kernel\Exception\KernelNotBootedException"/>
+                <referencedClass name="RxThunder\Core\Router\Exception\RouteNotFoundException"/>
+            </errorLevel>
+        </DeprecatedClass>
+    </issueHandlers>
 </psalm>

@@ -18,8 +18,8 @@ final class MetadataBagTest extends TestCase
     public function testConstructionAndUsage(): void
     {
         $metadata_bag = new MetadataBag([
-            true => true,
-            2 => 2,
+            true     => true,
+            2        => 2,
             'string' => 'string',
         ]);
 
