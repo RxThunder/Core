@@ -55,9 +55,16 @@ class Kernel implements KernelInterface
     protected function initializeContainer(): void
     {
         $this->loadEnvironment();
+        $this->loadExtensions();
         $this->loadDefinitions();
 
         $this->container->compile();
+    }
+
+    protected function loadEnvironment(): void
+    {
+        (new Dotenv())->populate(['APP_ENV' => $this->getEnvironment()]);
+        (new Dotenv())->loadEnv($this->getProjectDir() . '/.env');
     }
 
     protected function loadDefinitions(): void
@@ -88,10 +95,21 @@ class Kernel implements KernelInterface
         $personal_loader->load('services.php');
     }
 
-    protected function loadEnvironment(): void
+    protected function loadExtensions(): void
     {
-        (new Dotenv())->populate(['APP_ENV' => $this->getEnvironment()]);
-        (new Dotenv())->loadEnv($this->getProjectDir() . '/.env');
+        $extension_file_path = $this->getConfigDir() . '/extensions.php';
+        if (!file_exists($extension_file_path)) {
+            return;
+        }
+
+        /** @var array<class-string> $extensions */
+        $extensions = require $extension_file_path;
+
+        foreach ($extensions as $extension) {
+            $extension = new $extension();
+            $this->container->registerExtension($extension);
+            $this->container->loadFromExtension($extension->getAlias());
+        }
     }
 
     protected function initiateProjectDir(): string

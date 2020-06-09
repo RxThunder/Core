@@ -29,8 +29,11 @@ final class KernelTest extends TestCase
         // Testing second time do nothing
         $kernel->boot();
 
+        $container = $kernel->getContainer();
+
         $this->assertSame(true, $kernel->booted());
-        $this->assertInstanceOf(ContainerBuilder::class, $kernel->getContainer());
+        $this->assertTrue($container->getParameter('extension.dummy'));
+        $this->assertInstanceOf(ContainerBuilder::class, $container);
     }
 
     public function testProjectDir(): void
