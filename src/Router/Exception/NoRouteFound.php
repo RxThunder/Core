@@ -11,13 +11,15 @@ declare(strict_types=1);
 
 namespace RxThunder\Core\Router\Exception;
 
-/**
- * @deprecated
- */
-class RouteNotFoundException extends NoRouteFound
+class NoRouteFound extends \RuntimeException
 {
-    public function __construct(string $route)
+    protected function __construct(string $route)
     {
         parent::__construct("Route {$route} has not been found by the matcher in the router");
+    }
+
+    public static function forPath(string $path): self
+    {
+        return new self($path);
     }
 }

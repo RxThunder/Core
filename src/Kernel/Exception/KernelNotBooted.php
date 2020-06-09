@@ -11,13 +11,15 @@ declare(strict_types=1);
 
 namespace RxThunder\Core\Kernel\Exception;
 
-/**
- * @deprecated
- */
-final class KernelNotBootedException extends KernelNotBooted
+class KernelNotBooted extends \LogicException
 {
-    public function __construct()
+    protected function __construct(string $message)
     {
-        parent::__construct('The kernel must be booted before executing this operation');
+        parent::__construct($message);
+    }
+
+    public static function gettingContainer(): self
+    {
+        return new self('The kernel must be booted before getting the container instance');
     }
 }
